@@ -1,4 +1,4 @@
-package com.SI.loadshift;
+
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -22,23 +22,22 @@ class WorkerThread implements Runnable {
 		try {
 			ScheduleDAO sdc= new ScheduleDAO();
 			ArrayList<HashMap<String,Object>> listOfCustomers=sdc.getEventCustomer(eventId);
+			System.out.println("Start Worker Thread");
 			if (listOfCustomers.size() > 0) {
 
 				ExecutorService executor = Executors.newFixedThreadPool(listOfCustomers.size());// creating a pool of 1000
 																							// threads
 				for (int i = 0; i < listOfCustomers.size(); i++) {
-					Runnable worker = new EventCustomerThread((int) listOfCustomers.get(i).get("customerId"),(int) listOfCustomers.get(i).get("eventCustomerMapping"),startTime,eventId );
-					System.out.println("List of run workers");
+					Runnable worker = new EventCustomerThread((int) listOfCustomers.get(i).get("customerId"),(int) listOfCustomers.get(i).get("eventCustomerMapping"), startTime, eventId);
+					System.out.println("List of run workers Worker Thread");
 					executor.execute(worker);// calling execute method of ExecutorService
 				}
-				sdc.updateEventStatus(eventId);
 				executor.shutdown();
 				while (!executor.isTerminated()) {
 				}
-				
+			//	sdc.updateEventStatus(eventId);
 			}
-			sdc.updateEventStatus(eventId);
-
+			// sdc.updateEventStatus(eventId);
 			
 	} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

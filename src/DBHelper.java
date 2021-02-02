@@ -1,4 +1,4 @@
-package com.SI.loadshift;
+
 import java.beans.Customizer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -199,7 +199,7 @@ public class DBHelper {
 			int customerStatus=0;
 			if(ScheduleDAO.con!=null)
 			{
-				String query="update event_customer_mapping set event_customer_status_id=8 where event_id=? and customer_id=?";
+				String query="update event_customer_mapping set event_customer_status_id=13 where event_id=? and customer_id=?";
 					  pstmt=ScheduleDAO.con.prepareStatement(query);
 					  pstmt.setInt(1,eventId); 
 					  pstmt.setInt(2,userId); 

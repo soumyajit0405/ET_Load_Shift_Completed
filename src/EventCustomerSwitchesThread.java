@@ -1,4 +1,4 @@
-package com.SI.loadshift;
+
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -91,7 +91,7 @@ class EventCustomerSwitchesThread implements Runnable {
 		JSONObject input= new JSONObject();
 		JSONObject payload= new JSONObject();
 		JSONObject params = new JSONObject();
-		params.put("_state", false);
+		params.put("_state", true);
 		JSONObject device = new JSONObject();
 		device.put("id", this.kiotDeviceId);
 		JSONObject customData = new JSONObject(this.customData);
@@ -106,9 +106,9 @@ class EventCustomerSwitchesThread implements Runnable {
 		int responseFromDevice = httpconnectorhelper
 				.sendPostWithToken("https://api.kiot.io/integrations/ctp/go",bearerToken, input);
 		if(responseFromDevice == 0) {
-			dbhelper.updateEventCustomer(eventId,customerId);
+		//	dbhelper.updateEventCustomer(eventId,customerId);
 		} else {
-			dbhelper.updateEventCustomerToLive(eventId, customerId);
+		//	dbhelper.updateEventCustomerToLive(eventId, customerId);
 		}
 		
 	}

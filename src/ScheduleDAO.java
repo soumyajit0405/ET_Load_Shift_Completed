@@ -1,4 +1,4 @@
-package com.SI.loadshift;
+
 
 
 import java.sql.Connection;
@@ -30,8 +30,9 @@ public class ScheduleDAO {
 		 }
 		//	System.out.println("select aso.sell_order_id,ubc.private_key,ubc.public_key,abc.order_id from all_sell_orders aso,all_blockchain_orders abc, user_blockchain_keys ubc where aso.transfer_start_ts ='"+date+" "+time+"' and abc.general_order_id=aso.sell_order_id and abc.order_type='SELL_ORDER' and ubc.user_id  = aso.seller_id and aso.order_status_id=1");
 		 // String query="select aso.sell_order_id,ubc.private_key,ubc.public_key,abc.order_id,abc.all_blockchain_orders_id from all_sell_orders aso,all_blockchain_orders abc, user_blockchain_keys ubc where aso.transfer_start_ts ='"+date+" "+time+"' and abc.general_order_id=aso.sell_order_id and abc.order_type='SELL_ORDER' and ubc.user_id  = aso.seller_id and aso.order_status_id=3";
-		 	String query="select a.event_id from all_events a where  a.event_status_id= 8 and a.event_end_time ='"+date+" "+time+"' and a.event_type_id = 2";
-		//	String query="select a.event_id from all_events a where  a.event_status_id= 8 and a.event_end_time ='2020-10-18 14:45:00'";
+		 	//String query="select a.event_id from all_events a where  a.event_status_id= 8 and a.event_end_time ='"+date+" "+time+"' and a.event_type_id = 2";
+		 	String query="select a.event_id from all_events a where  a.event_status_id= 2 and a.event_start_time ='"+date+" "+time+"' and a.event_type_id = 2";
+		//String query="select a.event_id from all_events a where  a.event_status_id= 2 and a.event_start_time ='2020-12-03 20:00:00' and a.event_type_id = 2";
 			pstmt=con.prepareStatement(query);
 		// pstmt.setString(1,controllerId);
 		 ResultSet rs= pstmt.executeQuery();
@@ -52,39 +53,15 @@ public class ScheduleDAO {
 	 
 	 public void updateEventStatus(int eventId) throws SQLException, ClassNotFoundException
 	 {
-		 PreparedStatement pstmt = null, pstmst1= null;
-		 double committedPower =0, actualPower =0;
-		 int eventSetId=0;
+		 PreparedStatement pstmt = null;
 		//JDBCConnection connref =new JDBCConnection();
 		 if (con == null ) {
 				con = JDBCConnection.getOracleConnection();
 		 }
-		 String query = "select commited_power,actual_power,event_set_id from all_events where event_id=?";
-			pstmt = con.prepareStatement(query);
-			 pstmt.setInt(1,eventId);
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				committedPower = rs.getDouble(1);
-				actualPower = rs.getDouble(2);
-				eventSetId = rs.getInt(3);
-		}
-			double resultantPower= committedPower- actualPower;
-		 // query="update all_events set event_status_id=3,short_fall="+resultantPower+" where event_id =?";
-		 query="update all_events set event_status_id=3 where event_id =?";
+		 String query="update all_events set event_status_id=8 where event_id =?";
 		 pstmt=con.prepareStatement(query);
 		pstmt.setInt(1,eventId);
 		 pstmt.executeUpdate();
-		 
-		 query="update all_event_sets set actual_power=actual_power+? where event_set_id =?";
-		 pstmt=con.prepareStatement(query);
-		 pstmt.setDouble(1,actualPower);
-		pstmt.setInt(2,eventSetId);
-		 pstmt.executeUpdate();
-		 
-				query =" update all_event_sets set status_id=5 where event_set_id =?";
-				pstmst1=con.prepareStatement(query);
-				pstmst1.setInt(1, eventSetId);
-				pstmst1.execute();
 		 
 	 }
 	 
